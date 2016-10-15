@@ -11,7 +11,12 @@ TextDiffBinding.prototype._remove = function() {
 };
 
 TextDiffBinding.prototype._getElementValue = function() {
-  var value = this.element.value;
+  var value;
+  if(typeof this.element.value !== "undefined"){
+    value = this.element.value;
+  } else {
+    value = this.element.textContent;
+  }
   // IE and Opera replace \n with \r\n. Always store strings as \n
   return value.replace(/\r\n/g, '\n');
 };
@@ -96,5 +101,9 @@ TextDiffBinding.prototype._transformSelectionAndUpdate = function(index, length,
 TextDiffBinding.prototype.update = function() {
   var value = this._get();
   if (this._getElementValue() === value) return;
-  this.element.value = value;
+  if(typeof this.element.value !== "undefined"){
+    this.element.value = value;
+  } else {
+    this.element.textContent = value;
+  }
 };
