@@ -15,7 +15,7 @@ TextDiffBinding.prototype._getElementValue = function() {
   if(typeof this.element.value !== "undefined"){
     value = this.element.value;
   } else {
-    value = this.element.textContent;
+    value = this.element.innerText;
   }
   // IE and Opera replace \n with \r\n. Always store strings as \n
   return value.replace(/\r\n/g, '\n');
@@ -104,6 +104,6 @@ TextDiffBinding.prototype.update = function() {
   if(typeof this.element.value !== "undefined"){
     this.element.value = value;
   } else {
-    this.element.textContent = value;
+    this.element.innerText = value;
   }
 };
