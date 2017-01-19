@@ -86,13 +86,28 @@ function removeCursorTransform(index, length, cursor) {
   return (index < cursor) ? cursor - Math.min(length, cursor - index) : cursor;
 }
 
+function selectElementContents(el, selectionStart, selectionEnd) {
+    var range = document.createRange();
+    range.setStart(el, selectionStart);
+    range.setEnd(el, selectionEnd);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+}
+
 TextDiffBinding.prototype._transformSelectionAndUpdate = function(index, length, transformCursor) {
   if (document.activeElement === this.element) {
     var selectionStart = transformCursor(index, length, this.element.selectionStart);
     var selectionEnd = transformCursor(index, length, this.element.selectionEnd);
     var selectionDirection = this.element.selectionDirection;
     this.update();
-    this.element.setSelectionRange(selectionStart, selectionEnd, selectionDirection);
+    var value;
+
+    if(typeof this.element.value !== "undefined"){  //case for input and textarea elements
+      this.element.setSelectionRange(selectionStart, selectionEnd, selectionDirection);
+    } else {                                        //case for contenteditable div
+      selectElementContents(this.element, selectionStart, selectionEnd);
+    }
   } else {
     this.update();
   }
